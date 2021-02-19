@@ -6,5 +6,5 @@
 
 ## 内置功能
 
-1.  以SpringCloud为基础搭建微服务
+1.  gateway_service 网关开发与服务
 2.  根据表结构生成基础文件
