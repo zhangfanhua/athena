@@ -1,0 +1,74 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    #对外暴露的微服务名字
+    name: gatewayservice
+  cloud:
+    config:
+      discovery:
+        enabled: true
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url:  jdbc:postgresql://61.153.224.202:15432/cortpdb_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: admin
+    password: Cortp!pg,123
+    driverClassName:  org.postgresql.Driver
+    ##  Hikari 连接池配置 ------ 详细配置请访问：https://github.com/brettwooldridge/HikariCP
+    ## 最小空闲连接数量
+    hikari:
+      minimum-idle: 5
+      ## 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      ## 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      ## 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      ## 连接池母子
+      pool-name: HikariPool-zeus
+      ## 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      ## 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    #eureka服务端的实例名称
+    hostname: 127.0.0.1
+    instance-id: ${eureka.instance.hostname}:${server.port}
+  client:
+    #false表示不向注册中心注册自己
+    registerWithEureka: true
+    #false表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务
+    fetchRegistry: true
+    serviceUrl:
+      #设置与Eureka Server交互的地址查询服务和注册服务都需要依赖这个地址
+      #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      #      defaultZone: http://120.25.105.225:8761/eureka/
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+logging:
+  file:
+    name: gatewayservice.log
+
+mybatis:
+  configuration:
+    #设置开启驼峰命名映射
+    map-underscore-to-camel-case: true
+
+zuul:
+  host:
+    connect-timeout-millis: 15000 #HTTP连接超时要比Hystrix的大
+    socket-timeout-millis: 60000   #socket超时
+
+
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+
