@@ -1,6 +1,8 @@
 #服务配置
 server:
   port: 8088
+  servlet:
+    context-path: /common
   undertow:
     # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责„多个连接, 默认设置每个CPU核心一个线程
     # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
@@ -28,11 +30,10 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    datastreamdb:
-      driverClassName:  org.postgresql.Driver
-      jdbcUrl:  jdbc:postgresql://61.153.224.202:5433/data_stream_db?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    platform:
+      jdbcUrl: jdbc:postgresql://61.153.224.202:15432/cortpdb_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
       username: admin
-      password: Cortp!dev,34$kshqzp
+      password: Cortp!pg,123
     ##  Hikari 连接池配置 ------ 详细配置请访问：https://github.com/brettwooldridge/HikariCP
     ## 最小空闲连接数量
     hikari:
@@ -50,3 +51,22 @@ spring:
       ## 数据库连接超时时间,默认30秒，即30000
       connection-timeout: 90000
       connection-test-query: SELECT 1
+  banner:
+    charset: UTF-8
+    http:
+      encoding:
+        force: true
+        charset: UTF-8
+    application:
+      name: xx-common
+    freemarker:
+      request-context-attribute: request
+      suffix: .ftl
+      content-type: text/html
+      enabled: true
+      cache: false
+      charset: UTF-8
+      allow-request-override: false
+      expose-request-attributes: true
+      expose-session-attributes: true
+      expose-spring-macro-helpers: true

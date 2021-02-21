@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xx.cortp.repository.platform.GeneratorMapper">
+
+    <select id="findTables" resultType="string">
+        SELECT DISTINCT schemaname||'.'||tablename AS tableName
+        FROM pg_tables a LEFT JOIN pg_class b ON a.tablename = b.relname
+        <if test="null != tableName and '' != tableName">
+            WHERE schemaname||'.'||tablename LIKE  CONCAT(#{tableName},'%')
+        </if>
+    </select>
+
+    <select id="findTableColumn" resultType="map">
+        SELECT DISTINCT a.attname AS "columnName",
+                 c.relname AS "tableName",
+                 CAST(obj_description(relfilenode,'pg_class') AS VARCHAR) AS "tableDesc",
+                 CONCAT_WS('',t.typname,SUBSTRING(format_type(a.atttypid,a.atttypmod) FROM '\(.*\)')) AS "type",
+                 d.description AS "desc"
+        FROM pg_attribute a
+         LEFT JOIN pg_class c ON a.attrelid = c.oid
+         LEFT JOIN pg_description d ON a.attrelid = d.objoid AND a.attnum = d.objsubid
+         LEFT JOIN pg_type t ON a.atttypid = t.oid
+        WHERE a.attnum>0 AND c.relname = #{tableName}
+        ORDER BY c.relname DESC
+
+    </select>
+
+</mapper>

@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
- * @Auther: Frank.Zhang
+ * @auther: Frank.Zhang
  * @Date: 2020/4/20 14:44
  * @Description:
  */

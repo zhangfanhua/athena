@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * @author Frank.zhang
+ */
 @Component
 public class ScheduledService {
 
@@ -22,18 +25,14 @@ public class ScheduledService {
 
     @Resource
     private SimpMessagingTemplate template;
-    /**
-     * 生成流量监控数据
-     * 每隔1秒发送一次消息
-     */
-//    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 1000)
     public void sendSecondMessage() {
-        List<Map> demo = new ArrayList<>();
-        Map map = new HashMap();
-        map.put("ddd","222");
-        demo.add(map);
-        String json = JSONObject.toJSONString(demo);
-        System.out.println(json);
-       // template.convertAndSend("/topic/second", JSON.toJSONString(map));
+//        List<Map> demo = new ArrayList<>();
+//        Map map = new HashMap();
+//        map.put("ddd","222");
+//        demo.add(map);
+//        String json = JSONObject.toJSONString(demo);
+//        System.out.println(json);
+//        template.convertAndSend("/topic/second", JSON.toJSONString(map));
     }
 }
