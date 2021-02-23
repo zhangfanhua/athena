@@ -427,6 +427,7 @@ CREATE TABLE 'userinfo' (
                 <div class="btn-group" role="group" aria-label="First group">
                     <button type="button" class="btn btn-default generator" id="jtdaoimpl">daoimpl</button>
                     <button type="button" class="btn btn-default generator" id="jtdao">dao</button>
+                    <button type="button" class="btn btn-default generator" id="date-swagger">date-swagger</button>
                 </div>
             </div>
             <#--<div class="btn-toolbar col-md-7" role="toolbar" aria-label="Toolbar with button groups">

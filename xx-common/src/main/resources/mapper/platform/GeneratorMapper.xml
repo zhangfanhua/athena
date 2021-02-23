@@ -16,12 +16,15 @@
                  c.relname AS "tableName",
                  CAST(obj_description(relfilenode,'pg_class') AS VARCHAR) AS "tableDesc",
                  CONCAT_WS('',t.typname,SUBSTRING(format_type(a.atttypid,a.atttypmod) FROM '\(.*\)')) AS "type",
-                 d.description AS "desc"
+                 REPLACE(d.description, ',',' ') AS "desc"
         FROM pg_attribute a
          LEFT JOIN pg_class c ON a.attrelid = c.oid
          LEFT JOIN pg_description d ON a.attrelid = d.objoid AND a.attnum = d.objsubid
          LEFT JOIN pg_type t ON a.atttypid = t.oid
-        WHERE a.attnum>0 AND c.relname = #{tableName}
+         LEFT JOIN pg_tables pt ON pt.tablename = c.relname
+        WHERE a.attnum>0
+        AND pt.schemaname||'.'||pt.tablename = #{tableName}
+        AND CONCAT_WS('',t.typname,SUBSTRING(format_type(a.atttypid,a.atttypmod) FROM '\(.*\)')) != ''
         ORDER BY c.relname DESC
 
     </select>

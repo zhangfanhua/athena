@@ -54,7 +54,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         //表列描述
         StringBuilder tColumnDesc = new StringBuilder();
         //得到所有列
-        List<Map<String,String>> columns = gm.findTableColumn(tName);
+        List<Map<String,String>> columns = gm.findTableColumn(tableName);
         for (Map<String,String> column : columns) {
             String tableDesc = column.get("tableDesc") == null?"":column.get("tableDesc");
             if(tDesc.toString().isEmpty() && !tableDesc.isEmpty()){
@@ -92,6 +92,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         result.put("mybatis", freemarkerTool.processString("code-generator/mybatis/mybatis.ftl", params));
         result.put("model", freemarkerTool.processString("code-generator/mybatis/model.ftl", params));
         //jpa
+
         result.put("entity", freemarkerTool.processString("code-generator/jpa/entity.ftl", params));
         result.put("repository", freemarkerTool.processString("code-generator/jpa/repository.ftl", params));
         result.put("jpacontroller", freemarkerTool.processString("code-generator/jpa/jpacontroller.ftl", params));
@@ -115,7 +116,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         result.put("insert", freemarkerTool.processString("code-generator/sql/insert.ftl", params));
         result.put("update", freemarkerTool.processString("code-generator/sql/update.ftl", params));
         result.put("delete", freemarkerTool.processString("code-generator/sql/delete.ftl", params));
-
+        result.put("date-swagger", freemarkerTool.processString("code-generator/mybatis/date-swagger.ftl", params));
 
         return result;
     }
