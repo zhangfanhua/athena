@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${packageName}.repository.${classInfo.className}Dao">
+<mapper namespace="${packageName}.repository.${classInfo.className}Mapper">
 
-    <resultMap id="BaseResultMap" type="${packageName}.entity.${classInfo.className}Entity" >
+    <resultMap id="BaseResultMap" type="${packageName}.entity.${classInfo.className}" >
         <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
             <#list classInfo.fieldList as fieldItem >
                 <result column="${fieldItem.columnName}" property="${fieldItem.fieldName}" />
@@ -19,7 +19,7 @@
         </#if>
     </sql>
 
-    <insert id="insert" parameterType="${packageName}.entity.${classInfo.className}Entity">
+    <insert id="insert" parameterType="${packageName}.entity.${classInfo.className}">
         INSERT INTO ${classInfo.schema+classInfo.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
@@ -56,7 +56,7 @@
         WHERE id = ${r"#{id}"}
     </delete>
 
-    <update id="update" parameterType="${packageName}.entity.${classInfo.className}Entity">
+    <update id="update" parameterType="${packageName}.entity.${classInfo.className}">
         UPDATE ${classInfo.schema+classInfo.tableName}
         <set>
         <#list classInfo.fieldList as fieldItem >
@@ -73,7 +73,7 @@
         SELECT <include refid="Base_Column_List" />
         FROM ${classInfo.schema+classInfo.tableName}
         WHERE id = ${r"#{id}"}
-    </select
+    </select>
 
     <select id="list" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />

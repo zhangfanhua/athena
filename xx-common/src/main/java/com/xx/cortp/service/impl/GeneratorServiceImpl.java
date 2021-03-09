@@ -1,8 +1,11 @@
 package com.xx.cortp.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xx.cortp.config.DataSourceProvider;
 import com.xx.cortp.config.MyHikariDataSource;
 import com.xx.cortp.entity.DataSourceInfo;
+import com.xx.cortp.entity.ParamInfo;
 import com.xx.cortp.repository.platform.GeneratorMapper;
 import com.xx.cortp.service.GeneratorService;
 import com.xx.cortp.utils.FreemarkerTool;
@@ -10,9 +13,15 @@ import com.zaxxer.hikari.HikariDataSource;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +50,41 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public List<String> getTables(String tableName) {
         return gm.findTables(tableName);
+    }
+
+
+    @Override
+    public List<String> gainTable(ParamInfo paramInfo) {
+        RestTemplate restTemplate = new RestTemplate();
+        List<String> list = new ArrayList<>();
+        ResponseEntity<String> ret = null;
+        if(paramInfo.getDataType().equals("post")){
+            String sql = paramInfo.getTableSql();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+            HttpEntity<String> request = new HttpEntity<>(sql, headers);
+            ret = restTemplate.postForEntity(paramInfo.getCustomUrl(),request,String.class);
+        }else{
+            ret = restTemplate.getForEntity(paramInfo.getCustomUrl(),String.class);
+        }
+        if(null != ret){
+            HashMap body = JSON.parseObject(ret.getBody(), HashMap.class);
+            if(null != body.get("data")){
+                HashMap data = null;
+                try {
+                    data = JSON.parseObject(body.get("data").toString(), HashMap.class);
+                    if(null != data.get("list")){
+                        data = JSON.parseArray(data.get("list").toString(),HashMap.class).get(0);
+                    }
+                }catch (Exception e){
+                    data = JSON.parseArray(body.get("data").toString(),HashMap.class).get(0);
+                }
+                data.forEach((k,v)->{
+                    list.add(k.toString());
+                });
+            }
+        }
+        return list;
     }
 
     @Override
@@ -120,4 +164,6 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         return result;
     }
+
+
 }

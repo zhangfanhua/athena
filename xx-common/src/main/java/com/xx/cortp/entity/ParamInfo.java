@@ -18,6 +18,7 @@ public class ParamInfo {
     private String tinyintTransType;
     private String dataType;
     private boolean swagger;
+    private String customUrl;
 
     @Data
     public static class NAME_CASE_TYPE{

@@ -1,6 +1,7 @@
 package com.xx.cortp.service;
 
 import com.xx.cortp.entity.DataSourceInfo;
+import com.xx.cortp.entity.ParamInfo;
 import freemarker.template.TemplateException;
 
 import java.io.IOException;
@@ -39,10 +40,10 @@ public interface GeneratorService {
 
     /**
      * 重新配置数据源
-     * @param userName
-     * @param password
-     * @param url
+     * @param info
      */
     void reload(DataSourceInfo info);
+
+    List<String> gainTable(ParamInfo paramInfo);
 
 }

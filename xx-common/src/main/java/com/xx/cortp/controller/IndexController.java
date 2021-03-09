@@ -1,24 +1,28 @@
 package com.xx.cortp.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.xx.cortp.entity.ClassInfo;
-import com.xx.cortp.entity.DataSourceInfo;
-import com.xx.cortp.entity.ParamInfo;
-import com.xx.cortp.entity.ReturnT;
+import com.xx.cortp.dto.ExportDto;
+import com.xx.cortp.entity.*;
 import com.xx.cortp.service.GeneratorService;
 import com.xx.cortp.utils.CodeGenerateException;
+import com.xx.cortp.utils.ExcelUtil;
 import com.xx.cortp.utils.TableParseUtil;
 import freemarker.template.TemplateException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +43,12 @@ public class IndexController {
 	@ApiOperation(value = "欢迎页")
 	public String index() {
 		return "index";
+	}
+
+	@GetMapping("/excel")
+	@ApiOperation(value = "欢迎页")
+	public String index2() {
+		return "index2";
 	}
 
 	@ApiOperation("更新数据源")
@@ -66,6 +76,23 @@ public class IndexController {
 		List<String> tables = gs.getTables(paramInfo.getTableName());
 		result.put("tables", JSONArray.toJSONString(tables));
 		return new ReturnT<>(result);
+	}
+
+	@ApiOperation("获取对象信息")
+	@PostMapping("/gainTable")
+	@ResponseBody
+	public ReturnT<Map<String, Object>> gainTable(@RequestBody ParamInfo paramInfo){
+		Map<String, Object> result = new HashMap<>(1);
+		List<String> list = gs.gainTable(paramInfo);
+		result.put("table", JSONArray.toJSONString(list));
+		return new ReturnT<>(result);
+	}
+
+	@ApiOperation("导出")
+	@PostMapping("/export")
+	@ResponseBody
+	public void gainTable(HttpServletResponse response, @RequestBody @ApiParam(value = " ",name=" ") ExportDto dto) throws IOException {
+		ExcelUtil.export(response,dto.getDetailList(),dto.getTitles(),dto.getName());
 	}
 
 	@PostMapping("/genCode")
