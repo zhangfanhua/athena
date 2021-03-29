@@ -29,4 +29,24 @@
 
     </select>
 
+    <select id="findMysqlTables" resultType="string">
+        SELECT table_name AS tableName FROM information_schema.tables
+        <if test="null != tableName and '' != tableName">
+            WHERE table_schema = #{tableName}
+        </if>
+    </select>
+
+    <select id="findMysqlTableColumn" resultType="map">
+        SELECT
+            #{tableName} AS "tableName",
+            column_name AS "columnName",
+            column_comment AS "desc",
+            column_type AS "type"
+        FROM information_schema.columns
+        WHERE table_schema ='mmhw'
+        <if test="null != tableName and '' != tableName">
+            AND table_name = #{tableName}
+        </if>
+    </select>
+
 </mapper>

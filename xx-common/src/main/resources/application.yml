@@ -31,6 +31,10 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     platform:
+#      jdbcUrl: jdbc:mysql://localhost:3306/mmhw?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT%2B8
+#      username: root
+#      password: passwd
+#    platform:
       jdbcUrl: jdbc:postgresql://61.153.224.202:15432/cortpdb_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
       username: admin
       password: Cortp!pg,123
@@ -70,3 +74,5 @@ spring:
       expose-request-attributes: true
       expose-session-attributes: true
       expose-spring-macro-helpers: true
+db:
+  type: postgresql

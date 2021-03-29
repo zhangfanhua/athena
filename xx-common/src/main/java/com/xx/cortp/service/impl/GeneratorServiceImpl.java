@@ -13,6 +13,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -39,6 +40,8 @@ public class GeneratorServiceImpl implements GeneratorService {
     private FreemarkerTool freemarkerTool;
     @Autowired
     private GeneratorMapper gm;
+    @Value("${db.type}")
+    private String dbType;
 
     @Override
     public void reload(DataSourceInfo info) {
@@ -49,7 +52,12 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     @Override
     public List<String> getTables(String tableName) {
-        return gm.findTables(tableName);
+        if(dbType.equals("mysql")){
+            return gm.findMysqlTables(tableName);
+        }else{
+            return gm.findTables(tableName);
+        }
+
     }
 
 
@@ -90,7 +98,10 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public String getTableInfo(String tableName) {
         //表名称 例如：cortp.product 得到 product
-        String tName = tableName.split("\\.")[1];
+        String tName = null;
+        if(!dbType.equals("mysql")){
+            tName = tableName.split("\\.")[1];
+        }
         //表描述
         StringBuilder tDesc = new StringBuilder();
         //表列
@@ -98,7 +109,12 @@ public class GeneratorServiceImpl implements GeneratorService {
         //表列描述
         StringBuilder tColumnDesc = new StringBuilder();
         //得到所有列
-        List<Map<String,String>> columns = gm.findTableColumn(tableName);
+        List<Map<String,String>> columns = null;
+        if(dbType.equals("mysql")){
+            columns = gm.findMysqlTableColumn(tableName);
+        } else {
+            columns = gm.findTableColumn(tableName);
+        }
         for (Map<String,String> column : columns) {
             String tableDesc = column.get("tableDesc") == null?"":column.get("tableDesc");
             if(tDesc.toString().isEmpty() && !tableDesc.isEmpty()){

@@ -26,8 +26,25 @@ public interface GeneratorMapper {
 
     /**
      * 查询表的所有列
+     *
      * @param tableName
      * @return
      */
-    List<Map<String,String>> findTableColumn(@Param("tableName") String tableName);
+    List<Map<String, String>> findTableColumn(@Param("tableName") String tableName);
+
+    /**
+     * 查询mysql所有表
+     *
+     * @param tableName
+     * @return
+     */
+    List<String> findMysqlTables(@Param("tableName") String tableName);
+
+    /**
+     * mysql查询表的所有列
+     *
+     * @param tableName
+     * @return
+     */
+    List<Map<String, String>> findMysqlTableColumn(@Param("tableName") String tableName);
 }
