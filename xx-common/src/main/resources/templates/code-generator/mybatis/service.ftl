@@ -10,17 +10,17 @@ public interface ${classInfo.className}Service {
     /**
     * 新增
     */
-    public ReturnT<String> insert(${classInfo.className} ${classInfo.className?uncap_first});
+    void insert(${classInfo.className} ${classInfo.className?uncap_first});
 
     /**
     * 删除
     */
-    public ReturnT<String> delete(String id);
+    void delete(String id);
 
     /**
     * 更新
     */
-    public ReturnT<String> update(${classInfo.className} ${classInfo.className?uncap_first});
+    void update(${classInfo.className} ${classInfo.className?uncap_first});
 
     /**
     * 根据主键 id 查询

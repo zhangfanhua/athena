@@ -23,7 +23,7 @@ public interface ${classInfo.className}Mapper {
     * @author ${authorName}
     * @date ${.now?string('yyyy/MM/dd')}
     **/
-    int delete(String id);
+    int delete(@Param("id") String id);
 
     /**
     * 更新
@@ -37,7 +37,7 @@ public interface ${classInfo.className}Mapper {
     * @author ${authorName}
     * @date ${.now?string('yyyy/MM/dd')}
     **/
-    ${classInfo.className} info(String id);
+    ${classInfo.className} info(@Param("id") String id);
 
     /**
     * 查询 分页查询
@@ -45,5 +45,33 @@ public interface ${classInfo.className}Mapper {
     * @date ${.now?string('yyyy/MM/dd')}
     **/
     List<${classInfo.className}> list();
+
+    /**
+    * 批量查询
+    * @author ${authorName}
+    * @date ${.now?string('yyyy/MM/dd')}
+    **/
+    List<${classInfo.className}> batchSelect(@Param("list") List<String> list);
+
+    /**
+    * 批量添加
+    * @author ${authorName}
+    * @date ${.now?string('yyyy/MM/dd')}
+    **/
+    int batchInsert(List<${classInfo.className}> list);
+
+    /**
+    * 批量更新
+    * @author ${authorName}
+    * @date ${.now?string('yyyy/MM/dd')}
+    **/
+    int batchUpdate(List<${classInfo.className}> list);
+
+    /**
+    * 批量删除
+    * @author ${authorName}
+    * @date ${.now?string('yyyy/MM/dd')}
+    **/
+    int batchDelete(@Param("list") List<String> list);
 
 }

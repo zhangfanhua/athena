@@ -80,4 +80,66 @@
         FROM ${classInfo.schema+classInfo.tableName}
     </select>
 
+    <insert id="batchInsert" resultType="int">
+        INSERT INTO  ${classInfo.schema+classInfo.tableName}
+        (<#list classInfo.fieldList as fieldItem >
+        <#if fieldItem.columnName != "id" && fieldItem.columnName != "AddTime" && fieldItem.columnName != "UpdateTime" >
+            ${fieldItem.columnName} <#if fieldItem_has_next>,</#if>
+        </#if>
+        </#list>)
+        VALUES
+        <foreach item="item" collection="list" open="" separator="," close="">
+            (<#list classInfo.fieldList as fieldItem >
+                <#if fieldItem.columnName != "id" && fieldItem.columnName != "AddTime" && fieldItem.columnName != "UpdateTime" >
+                    ${r"#{"}${"item."}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>
+                </#if>
+            </#list>)
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" resultType="int">
+        UPDATE ${classInfo.schema+classInfo.tableName}
+        SET
+        <#list classInfo.fieldList as fieldItem >
+            <#if fieldItem.columnName != "id" && fieldItem.columnName != "AddTime" && fieldItem.columnName != "UpdateTime" >
+                ${fieldItem.columnName} = ${fieldItem.fieldName} <#if fieldItem_has_next>,</#if>
+            </#if>
+        </#list>
+        FROM (VALUES
+        <foreach item="item" collection="list" separator="," open="" close="" index="">
+            (<#list classInfo.fieldList as fieldItem >
+            <#if fieldItem.columnName != "id" && fieldItem.columnName != "AddTime" && fieldItem.columnName != "UpdateTime" >
+                ${r"#{"}${"item."}${fieldItem.fieldName}${r"}"}<#if fieldItem_has_next>,</#if>
+            </#if>
+            </#list>)
+        </foreach>) AS tmp
+        (<#list classInfo.fieldList as fieldItem >
+        <#if fieldItem.columnName != "id" && fieldItem.columnName != "AddTime" && fieldItem.columnName != "UpdateTime" >
+            ${fieldItem.fieldName}<#if fieldItem_has_next>,</#if>
+        </#if>
+        </#list>)
+        WHERE ${classInfo.schema+classInfo.tableName}.id = tmp.id
+    </update>
+
+    <delete id="batchDelete" resultType="int">
+        DELETE FROM ${classInfo.schema+classInfo.tableName}
+        <WHERE>
+            id IN
+            <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+                ${r"#{"}item${r"}"}
+            </foreach>
+        </WHERE>
+    </delete>
+
+    <select id="batchSelect" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM ${classInfo.schema+classInfo.tableName}
+        <WHERE> id IN
+            <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+                ${r"#{"}item${r"}"}
+            </foreach>
+        </WHERE>
+    </select>
+
 </mapper>

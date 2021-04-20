@@ -66,7 +66,7 @@ public class ${classInfo.className}Controller {
     * @date ${.now?string('yyyy/MM/dd')}
     **/
     @RequestMapping("/pageList")
-    public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int offset,
+    public PageInfo<${classInfo.className}> pageList(@RequestParam(required = false, defaultValue = "0") int offset,
                                         @RequestParam(required = false, defaultValue = "10") int pagesize) {
         return ${classInfo.className?uncap_first}Service.pageList(offset, pagesize);
     }
