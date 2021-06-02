@@ -1,16 +1,14 @@
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @description ${classInfo.classComment}
  * @author ${authorName}
  * @date ${.now?string('yyyy-MM-dd HH:mm:ss')}
  */
+@Slf4j
 @RestController
 @RequestMapping("/${classInfo.className?uncap_first}")
 public class ${classInfo.className}Controller {
