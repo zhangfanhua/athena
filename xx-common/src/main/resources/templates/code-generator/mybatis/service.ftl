@@ -25,11 +25,11 @@ public interface ${classInfo.className}Service {
     /**
     * 根据主键 id 查询
     */
-    public ${classInfo.className} info(String id);
+    ${classInfo.className} info(String id);
 
     /**
     * 分页查询
     */
-    public PageInfo<${classInfo.className}> pageList();
+    PageInfo<${classInfo.className}> pageList();
 
 }
